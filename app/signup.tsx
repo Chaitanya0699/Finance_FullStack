@@ -11,7 +11,7 @@ import {
   ScrollView,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { ArrowLeft, Mail, Lock, Eye, EyeOff, User, Phone } from 'lucide-react-native';
+import { Mail, Lock, Eye, EyeOff, User, Phone } from 'lucide-react-native';
 import { useRouter } from 'expo-router';
 import { auth } from '../firebaseConfig';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
@@ -19,7 +19,7 @@ import { useAuth } from '../contexts/AuthContext';
 
 export default function SignUpScreen() {
   const router = useRouter();
-  const { loading } = useAuth();  // Keep loading state from context if needed
+  const { loading } = useAuth();
 
   const [formData, setFormData] = useState({
     name: '',
@@ -28,10 +28,10 @@ export default function SignUpScreen() {
     password: '',
     confirmPassword: '',
   });
+
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  // ✅ Register User with Firebase
   const registerUser = async (email: string, password: string) => {
     try {
       await createUserWithEmailAndPassword(auth, email, password);
@@ -65,7 +65,6 @@ export default function SignUpScreen() {
       return;
     }
 
-    // ✅ Call Firebase Register
     const result = await registerUser(email, password);
 
     if (!result.success) {
@@ -85,14 +84,6 @@ export default function SignUpScreen() {
     <KeyboardAvoidingView
       style={styles.container}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-
-      <View style={styles.header}>
-        <TouchableOpacity 
-          style={styles.backButton}
-          onPress={() => router.back()}>
-          <ArrowLeft size={24} color="#1e293b" strokeWidth={2} />
-        </TouchableOpacity>
-      </View>
 
       <ScrollView style={styles.content} keyboardShouldPersistTaps="handled">
         <View style={styles.logoContainer}>
@@ -213,31 +204,18 @@ export default function SignUpScreen() {
     </KeyboardAvoidingView>
   );
 }
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f8fafc',
   },
-  header: {
-    paddingHorizontal: 20,
-    paddingTop: 60,
-    paddingBottom: 20,
-  },
-  backButton: {
-    padding: 8,
-    borderRadius: 12,
-    backgroundColor: '#ffffff',
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 3,
-    alignSelf: 'flex-start',
-  },
   content: {
-    flex: 1,
-    paddingHorizontal: 20,
-  },
+  flex: 1,
+  paddingHorizontal: 20,
+  paddingTop: 60, // ✅ Add this line
+},
+
   logoContainer: {
     alignItems: 'center',
     marginBottom: 32,

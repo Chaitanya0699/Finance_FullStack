@@ -45,13 +45,7 @@ export default function LoginScreen() {
       style={styles.container}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
       
-      <View style={styles.header}>
-        <TouchableOpacity 
-          style={styles.backButton}
-          onPress={() => router.back()}>
-          <ArrowLeft size={24} color="#1e293b" strokeWidth={2} />
-        </TouchableOpacity>
-      </View>
+      
 
       <View style={styles.content}>
         <View style={styles.logoContainer}>
@@ -138,25 +132,11 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f8fafc',
   },
-  header: {
-    paddingHorizontal: 20,
-    paddingTop: 60,
-    paddingBottom: 20,
-  },
-  backButton: {
-    padding: 8,
-    borderRadius: 12,
-    backgroundColor: '#ffffff',
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 3,
-    alignSelf: 'flex-start',
-  },
+  
   content: {
     flex: 1,
     paddingHorizontal: 20,
+    paddingTop: 60, // ✅ Add this line
   },
   logoContainer: {
     alignItems: 'center',

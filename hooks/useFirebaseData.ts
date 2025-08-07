@@ -15,6 +15,9 @@ import {
   Investment
 } from '../services/dataService';
 import { useAuth } from '../contexts/AuthContext';
+import { collection, onSnapshot, query, where, orderBy,addDoc, serverTimestamp, doc, updateDoc } from 'firebase/firestore';
+import { db } from '@/firebaseConfig';
+
 
 // -------------------- ASSETS --------------------
 export function useAssets() {
@@ -23,46 +26,67 @@ export function useAssets() {
   const [error, setError] = useState<string | null>(null);
   const { user } = useAuth();
 
-  const fetchAssets = async () => {
-    if (!user) return;
-    try {
-      setLoading(true);
-      const data = await assetsService.getAll();
-      setAssets(data);
-      setError(null);
-    } catch (err: any) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
-    fetchAssets();
+    if (!user) return;
+
+    setLoading(true);
+
+    const q = query(
+      collection(db, 'assets'),
+      where('userId', '==', user.uid),
+      orderBy('createdAt', 'desc')
+    );
+
+    const unsubscribe = onSnapshot(
+      q,
+      (snapshot) => {
+        const assetsData: Asset[] = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        })) as Asset[];
+        setAssets(assetsData);
+        setLoading(false);
+        setError(null);
+      },
+      (err) => {
+        console.error('Error listening to assets:', err);
+        setError(err.message);
+        setLoading(false);
+      }
+    );
+
+    return () => unsubscribe();
   }, [user]);
 
   const addAsset = async (assetData: Omit<Asset, 'id' | 'userId' | 'createdAt' | 'updatedAt'>) => {
-    try {
-      await assetsService.create(assetData);
-      await fetchAssets();
-    } catch (err: any) {
-      setError(err.message);
-    }
-  };
+  if (!user) return;
+  try {
+    await addDoc(collection(db, 'assets'), {
+      ...assetData,
+      userId: user.uid,
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp(),
+    });
+  } catch (err: any) {
+    setError(err.message);
+  }
+};
 
   const updateAsset = async (id: string, assetData: Partial<Asset>) => {
-    try {
-      await assetsService.update(id, assetData);
-      await fetchAssets();
-    } catch (err: any) {
-      setError(err.message);
-    }
-  };
+  try {
+    await updateDoc(doc(db, 'assets', id), {
+      ...assetData,
+      updatedAt: serverTimestamp(),
+    });
+  } catch (err: any) {
+    setError(err.message);
+  }
+};
 
   const deleteAsset = async (id: string) => {
     try {
       await assetsService.delete(id);
-      await fetchAssets();
+      // ❌ Removed: await fetchAssets();
     } catch (err: any) {
       setError(err.message);
     }
@@ -75,7 +99,6 @@ export function useAssets() {
     addAsset,
     updateAsset,
     deleteAsset,
-    refetch: fetchAssets,
   };
 }
 
