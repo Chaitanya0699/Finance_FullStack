@@ -36,34 +36,41 @@ export default function AddLoanScreen() {
   const [notes, setNotes] = useState('');
 
   const handleSave = async () => {
-    if (!loanName || !loanType || !totalAmount || !interestRate) {
-      Alert.alert('Error', 'Please fill in all required fields');
-      return;
-    }
+  if (!loanName || !loanType || !totalAmount || !interestRate) {
+    Alert.alert('Error', 'Please fill in all required fields');
+    return;
+  }
 
-    try {
-      await addLoan({
-        name: loanName,
-        type: loanType as any,
-        totalAmount: parseFloat(totalAmount),
-        interestRate: parseFloat(interestRate),
-        duration: duration ? parseInt(duration) : undefined,
-        emiAmount: emiAmount ? parseFloat(emiAmount) : undefined,
-        monthsPaid: 0,
-        startDate,
-        status: 'active',
-        notes: notes || undefined,
-      });
-      
-      Alert.alert(
-        'Success',
-        `Loan "${loanName}" added successfully!`,
-        [{ text: 'OK', onPress: () => router.back() }]
-      );
-    } catch (error: any) {
-      Alert.alert('Error', error.message);
-    }
-  };
+  try {
+    await addLoan({
+      name: loanName,
+      type: loanType,
+      amount: parseFloat(totalAmount), // Changed from totalAmount to amount
+      totalAmount: parseFloat(totalAmount), // Keep both for compatibility
+      interestRate: parseFloat(interestRate),
+      duration: duration ? parseInt(duration) : 0,
+      emiAmount: emiAmount ? parseFloat(emiAmount) : 0,
+      monthsPaid: 0,
+      startDate: startDate || new Date().toISOString().split('T')[0],
+      status: 'active',
+      lender: 'Unknown', // Add required field
+      notes: notes || '',
+      // Firestore will add these automatically:
+      // userId: current user ID
+      // createdAt: server timestamp
+      // updatedAt: server timestamp
+    });
+    
+    Alert.alert(
+      'Success',
+      `Loan "${loanName}" added successfully!`,
+      [{ text: 'OK', onPress: () => router.back() }]
+    );
+  } catch (error: any) {
+    console.error('Loan creation error:', error); // Add detailed logging
+    Alert.alert('Error', error.message);
+  }
+};
 
   return (
     <KeyboardAvoidingView

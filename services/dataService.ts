@@ -43,19 +43,21 @@ export interface Liability {
 
 export interface Loan {
   id?: string;
-  userId: string;
   name: string;
-  type: 'home' | 'vehicle' | 'personal' | 'education' | 'other';
-  totalAmount: number;
+  type: string;
+  amount: number;
+  totalAmount?: number; // Optional for backward compatibility
   interestRate: number;
-  duration?: number;
-  emiAmount?: number;
+  duration: number;
+  emiAmount: number;
   monthsPaid: number;
-  startDate: string;
-  status: 'active' | 'closed';
+  startDate: string | Date;
+  status: string;
+  lender: string;
   notes?: string;
-  createdAt: Timestamp;
-  updatedAt: Timestamp;
+  userId: string;
+  createdAt?: any;
+  updatedAt?: any;
 }
 
 export interface Expense {
