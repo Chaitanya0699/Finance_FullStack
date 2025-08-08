@@ -18,6 +18,7 @@ export default function RootLayout() {
         <Stack.Screen name="add-liability" />
         <Stack.Screen name="add-loan" />
         <Stack.Screen name="add-expense" />
+        <Stack.Screen name="add-income" />
         <Stack.Screen name="add-savings" />
         <Stack.Screen name="add-stock" />
         <Stack.Screen name="add-mutual-fund" />

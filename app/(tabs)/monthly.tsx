@@ -9,8 +9,9 @@ import {
   Dimensions,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { ChevronLeft, ChevronRight, Calendar, TrendingDown, TrendingUp, MoveHorizontal as MoreHorizontal } from 'lucide-react-native';
+import { ChevronLeft, ChevronRight, Calendar, TrendingDown, TrendingUp, MoveHorizontal as MoreHorizontal, Plus, DollarSign } from 'lucide-react-native';
 import Animated, { useSharedValue, useAnimatedStyle, withTiming, runOnJS } from 'react-native-reanimated';
+import { useRouter } from 'expo-router';
 import { useAuth } from '../../contexts/AuthContext';
 import { useMonthlyExpenses } from '../../hooks/useFirebaseData'; // ✅ Firebase hook
 
@@ -22,6 +23,7 @@ const months = [
 ];
 
 export default function MonthlyScreen() {
+  const router = useRouter();
   const { user } = useAuth();
   const [currentMonth, setCurrentMonth] = useState(0);
   const slideValue = useSharedValue(0);
@@ -142,6 +144,20 @@ export default function MonthlyScreen() {
   const renderNoData = () => (
     <View style={{ padding: 20, alignItems: 'center' }}>
       <Text style={{ color: '#64748b', fontSize: 16 }}>No transactions yet for this month.</Text>
+      <View style={styles.quickAddButtons}>
+        <TouchableOpacity 
+          style={[styles.quickAddButton, { backgroundColor: '#10B981' }]}
+          onPress={() => router.push('/add-income')}>
+          <DollarSign size={20} color="#ffffff" strokeWidth={2} />
+          <Text style={styles.quickAddText}>Add Income</Text>
+        </TouchableOpacity>
+        <TouchableOpacity 
+          style={[styles.quickAddButton, { backgroundColor: '#EF4444' }]}
+          onPress={() => router.push('/add-expense')}>
+          <Plus size={20} color="#ffffff" strokeWidth={2} />
+          <Text style={styles.quickAddText}>Add Expense</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 
@@ -156,6 +172,22 @@ export default function MonthlyScreen() {
 
       <ScrollView showsVerticalScrollIndicator={false}>
         {renderMonthSummary()}
+
+        {/* Quick Add Buttons */}
+        <View style={styles.quickActionsContainer}>
+          <TouchableOpacity 
+            style={[styles.quickActionButton, { backgroundColor: '#10B981' }]}
+            onPress={() => router.push('/add-income')}>
+            <DollarSign size={20} color="#ffffff" strokeWidth={2} />
+            <Text style={styles.quickActionText}>Add Income</Text>
+          </TouchableOpacity>
+          <TouchableOpacity 
+            style={[styles.quickActionButton, { backgroundColor: '#EF4444' }]}
+            onPress={() => router.push('/add-expense')}>
+            <Plus size={20} color="#ffffff" strokeWidth={2} />
+            <Text style={styles.quickActionText}>Add Expense</Text>
+          </TouchableOpacity>
+        </View>
 
         <View style={styles.expensesSection}>
           <Text style={styles.sectionTitle}>All Transactions</Text>
@@ -292,6 +324,31 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255, 255, 255, 0.3)',
     marginHorizontal: 20,
   },
+  quickActionsContainer: {
+    flexDirection: 'row',
+    marginHorizontal: 20,
+    marginBottom: 24,
+    gap: 12,
+  },
+  quickActionButton: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 14,
+    borderRadius: 16,
+    elevation: 3,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+  },
+  quickActionText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#ffffff',
+    marginLeft: 8,
+  },
   chartContainer: {
     marginHorizontal: 20,
     marginBottom: 24,
@@ -398,5 +455,25 @@ const styles = StyleSheet.create({
   },
   expenseMenuButton: {
     padding: 4,
+  },
+  quickAddButtons: {
+    flexDirection: 'row',
+    marginTop: 20,
+    gap: 12,
+  },
+  quickAddButton: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 12,
+    borderRadius: 12,
+    elevation: 2,
+  },
+  quickAddText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#ffffff',
+    marginLeft: 6,
   },
 });

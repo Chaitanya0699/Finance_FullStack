@@ -190,14 +190,14 @@ if (!user) {
       <View style={[styles.actionButtons, { marginTop: 12 }]}>
         <TouchableOpacity
           style={[styles.actionButton, { backgroundColor: '#16A34A' }]}
-          onPress={() => router.push({ pathname: '/add-expense', params: { tab: 'income' } })}>
+          onPress={() => router.push('/add-income')}>
           <DollarSign size={24} color="#ffffff" />
           <Text style={styles.actionButtonText}>Add Income</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           style={[styles.actionButton, { backgroundColor: '#DC2626' }]}
-          onPress={() => router.push({ pathname: '/add-expense', params: { tab: 'expense' } })}>
+          onPress={() => router.push('/add-expense')}>
           <Plus size={24} color="#ffffff" />
           <Text style={styles.actionButtonText}>Add Expense</Text>
         </TouchableOpacity>

@@ -26,20 +26,18 @@ import Animated, {
 import { useRouter } from 'expo-router';
 import { useExpenses } from '../hooks/useFirebaseData';
 
-const expenseCategories = [
-  { id: 'food', name: 'Food & Dining', icon: '🍽️', color: '#FF6B6B' },
-  { id: 'transport', name: 'Transportation', icon: '🚗', color: '#4ECDC4' },
-  { id: 'entertainment', name: 'Entertainment', icon: '🎮', color: '#45B7D1' },
-  { id: 'shopping', name: 'Shopping', icon: '🛍️', color: '#96CEB4' },
-  { id: 'bills', name: 'Bills & Utilities', icon: '💡', color: '#FFEAA7' },
-  { id: 'healthcare', name: 'Healthcare', icon: '⚕️', color: '#FD79A8' },
-  { id: 'education', name: 'Education', icon: '📚', color: '#A29BFE' },
-  { id: 'fuel', name: 'Fuel', icon: '⛽', color: '#FF7675' },
-  { id: 'groceries', name: 'Groceries', icon: '🛒', color: '#00B894' },
-  { id: 'other', name: 'Other', icon: '📝', color: '#6C5CE7' },
+const incomeCategories = [
+  { id: 'salary', name: 'Salary', icon: '💰', color: '#10B981' },
+  { id: 'freelance', name: 'Freelance', icon: '💻', color: '#3B82F6' },
+  { id: 'investment', name: 'Investment', icon: '📈', color: '#8B5CF6' },
+  { id: 'gift', name: 'Gift', icon: '🎁', color: '#F59E0B' },
+  { id: 'bonus', name: 'Bonus', icon: '🎯', color: '#10B981' },
+  { id: 'rental', name: 'Rental', icon: '🏠', color: '#3B82F6' },
+  { id: 'business', name: 'Business', icon: '💼', color: '#8B5CF6' },
+  { id: 'other', name: 'Other', icon: '📝', color: '#6B7280' },
 ];
 
-export default function AddExpenseScreen() {
+export default function AddIncomeScreen() {
   const router = useRouter();
   const { addExpense } = useExpenses();
   const [amount, setAmount] = useState('');
@@ -74,12 +72,12 @@ export default function AddExpenseScreen() {
         amount: parseFloat(amount),
         description: description || undefined,
         date,
-        type: 'expense',
+        type: 'income',
       });
       
       Alert.alert(
         'Success',
-        `Expense of ₹${amount} added successfully!`,
+        `Income of ₹${amount} added successfully!`,
         [
           {
             text: 'OK',
@@ -106,7 +104,7 @@ export default function AddExpenseScreen() {
           onPress={() => router.back()}>
           <ArrowLeft size={24} color="#1e293b" strokeWidth={2} />
         </TouchableOpacity>
-        <Text style={styles.title}>Add Expense</Text>
+        <Text style={styles.title}>Add Income</Text>
         <View style={styles.placeholder} />
       </View>
 
@@ -114,7 +112,7 @@ export default function AddExpenseScreen() {
         style={styles.content}
         contentContainerStyle={styles.scrollContent}
         keyboardShouldPersistTaps="handled">
-        
+
         {/* Amount Input */}
         <View style={styles.amountContainer}>
           <Text style={styles.sectionLabel}>Amount</Text>
@@ -133,9 +131,9 @@ export default function AddExpenseScreen() {
 
         {/* Category Selector */}
         <View style={styles.categoriesContainer}>
-          <Text style={styles.sectionLabel}>Expense Category</Text>
+          <Text style={styles.sectionLabel}>Income Category</Text>
           <View style={styles.categoriesGrid}>
-            {expenseCategories.map((category) => (
+            {incomeCategories.map((category) => (
               <Animated.View 
                 key={category.id} 
                 style={[animatedButtonStyle, styles.categoryItemWrapper]}
@@ -212,14 +210,12 @@ export default function AddExpenseScreen() {
             onPress={handleSave}
             activeOpacity={0.9}>
             <LinearGradient
-              colors={['#EF4444', '#DC2626']}
+              colors={['#10B981', '#059669']}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
               style={styles.saveButton}>
               <Plus size={24} color="#ffffff" strokeWidth={2} />
-              <Text style={styles.saveButtonText}>
-                Add Expense
-              </Text>
+              <Text style={styles.saveButtonText}>Add Income</Text>
             </LinearGradient>
           </TouchableOpacity>
         </View>
@@ -283,7 +279,7 @@ const styles = StyleSheet.create({
   rupeeSymbol: {
     fontSize: 24,
     fontWeight: '700',
-    color: '#EF4444',
+    color: '#10B981',
   },
   amountInput: {
     flex: 1,
@@ -316,10 +312,9 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   categoryItemSelected: {
-    backgroundColor: '#f0f9ff',
-    backgroundColor: '#fef2f2',
+    backgroundColor: '#f0fdf4',
     borderWidth: 2,
-    borderColor: '#EF4444',
+    borderColor: '#10B981',
   },
   categoryIcon: {
     width: 48,
@@ -340,7 +335,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: -4,
     right: -4,
-    backgroundColor: '#EF4444',
+    backgroundColor: '#10B981',
     borderRadius: 12,
     padding: 4,
     borderWidth: 2,
@@ -354,7 +349,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   categoryNameSelected: {
-    color: '#EF4444',
+    color: '#10B981',
   },
   descriptionContainer: {
     marginBottom: 24,
